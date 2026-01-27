@@ -1,0 +1,36 @@
+{
+  "saved_at": "2026-01-26T15:46:30.127275",
+  "passing_threshold": 70.0,
+  "candidates": [
+    {
+      "candidate_id": "123456",
+      "name": "Joe LaHa",
+      "score": 100.0,
+      "domain_scores": {
+        "mechanical": 100,
+        "electrical": 100,
+        "hydraulics": 100,
+        "plcs_&_controls": 100,
+        "safety_&_procedures": 100,
+        "troubleshooting_&_diagnostics": 100
+      },
+      "timestamp": "2026-01-26T15:44:50.126583",
+      "passed": true
+    },
+    {
+      "candidate_id": "654321",
+      "name": "John Doe",
+      "score": 58.0,
+      "domain_scores": {
+        "mechanical": 50,
+        "electrical": 75,
+        "hydraulics": 50,
+        "plcs_&_controls": 50,
+        "safety_&_procedures": 75,
+        "troubleshooting_&_diagnostics": 50
+      },
+      "timestamp": "2026-01-26T15:46:30.127220",
+      "passed": false
+    }
+  ]
+}
