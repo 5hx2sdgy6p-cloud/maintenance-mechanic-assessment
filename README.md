@@ -6,6 +6,7 @@ A free, open-source technical assessment tool for evaluating maintenance mechani
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![React](https://img.shields.io/badge/React-18.2-61dafb.svg)
+![Python](https://img.shields.io/badge/Python-3.10+-green.svg)
 
 ## 🎯 Why This Exists
 
@@ -14,6 +15,7 @@ Tired of candidates who claim 10 years of experience but can't read a schematic?
 - **Filter out unqualified candidates** before wasting time on interviews
 - **Identify skill gaps** in your current team for targeted training
 - **Standardize evaluations** across all candidates and employees
+- **Track rankings** to see how candidates compare to each other
 
 ## ✨ Features
 
@@ -24,6 +26,14 @@ Tired of candidates who claim 10 years of experience but can't read a schematic?
 - **Excel Export** — Download results for reporting and documentation
 - **Save & Resume** — Candidates can pause and continue assessments
 - **No Subscriptions** — You own the code, run it yourself
+
+### 🆕 NEW: AVL Score Tracker
+
+- **Real-time Rankings** — See how each candidate ranks against all others
+- **Percentile Scores** — "Better than 85% of candidates"
+- **Domain Analysis** — Identify weakest areas across ALL candidates
+- **Persistent Data** — Scores saved and tracked over time
+- **Fast Performance** — AVL tree provides O(log n) lookups
 
 ## 📊 Assessment Levels
 
@@ -50,21 +60,42 @@ Tired of candidates who claim 10 years of experience but can't read a schematic?
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) (v16 or higher)
+- [Python](https://python.org/) (v3.10 or higher)
 - npm (comes with Node.js)
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/maintenance-mechanic-assessment.git
+git clone https://github.com/5hx2sdgy6p-cloud/maintenance-mechanic-assessment.git
 
 # Navigate to project folder
 cd maintenance-mechanic-assessment
 
-# Install dependencies
+# Install Node dependencies
 npm install
 
-# Start the development server
+# Install Python dependencies
+python -m pip install flask flask-cors
+```
+
+### Running the Application
+
+**Option 1: Use the Batch File (Easiest)**
+
+Double-click `Start Assessment Tool.bat` — this starts both servers automatically.
+
+**Option 2: Manual Start**
+
+Open two terminal windows:
+
+Terminal 1 - Start Backend:
+```bash
+python assessment_backend.py
+```
+
+Terminal 2 - Start Frontend:
+```bash
 npm start
 ```
 
@@ -83,9 +114,13 @@ This creates an optimized build in the `/build` folder that you can deploy to an
 ### For Candidates/Employees
 
 1. Enter your name and employee ID
-2. Select whether you're a **Candidate** or **Current Employee**
-3. Answer the 25 randomized questions (pulled from all domains and difficulty levels)
-4. Review your results showing scores by domain
+2. Select the assessment level
+3. Answer the randomized questions
+4. Review your results showing:
+   - Overall score
+   - **Rank compared to other candidates** (NEW!)
+   - **Percentile** (NEW!)
+   - Scores by domain
 
 ### For Administrators
 
@@ -94,6 +129,16 @@ This creates an optimized build in the `/build` folder that you can deploy to an
 3. View all completed assessments with detailed breakdowns
 4. Compare candidates side-by-side
 5. Export results to Excel for documentation
+
+### Score Tracker API Endpoints
+
+While the backend is running, you can access these endpoints:
+
+| Endpoint | Description |
+|----------|-------------|
+| `http://localhost:5000/api/statistics` | Overall statistics |
+| `http://localhost:5000/api/rankings` | All candidates ranked |
+| `http://localhost:5000/api/domain-analysis` | Weakest/strongest domains |
 
 > ⚠️ **Change the default admin password** in `src/constants/assessmentConstants.js` before deploying!
 
@@ -108,6 +153,14 @@ export const ADMIN_CONFIG = {
   DEFAULT_PASSWORD: 'your-secure-password-here',
   SESSION_TIMEOUT: 3600000, // 1 hour in milliseconds
 };
+```
+
+### Changing the Passing Threshold
+
+Edit `assessment_backend.py`:
+
+```python
+tracker = CandidateScoreTracker(passing_threshold=70.0, max_candidates=10000)
 ```
 
 ### Customizing Assessment Levels
@@ -163,21 +216,43 @@ maintenance-mechanic-assessment/
 ├── src/
 │   ├── components/
 │   │   └── assessment/
-│   │       └── QuestionCard.js    # Question display component
+│   │       └── QuestionCard.js        # Question display component
 │   ├── constants/
-│   │   └── assessmentConstants.js # Questions & configuration
+│   │   └── assessmentConstants.js     # Questions & configuration
 │   ├── hooks/
-│   │   └── useAssessment.js       # Custom React hooks
+│   │   └── useAssessment.js           # Custom React hooks
 │   ├── services/
-│   │   ├── assessmentService.js   # Assessment logic
-│   │   └── excelExportService.js  # Excel export functionality
+│   │   ├── assessmentService.js       # Assessment logic
+│   │   ├── excelExportService.js      # Excel export functionality
+│   │   └── scoreTrackerService.js     # AVL score tracker API client (NEW)
 │   ├── utils/
-│   │   └── helpers.js             # Utility functions
-│   ├── App.js                     # Main application
-│   └── index.js                   # Entry point
+│   │   └── helpers.js                 # Utility functions
+│   ├── App.js                         # Main application
+│   └── index.js                       # Entry point
+├── avl_tree_production.py             # AVL tree implementation (NEW)
+├── candidate_score_tracker.py         # Score tracking logic (NEW)
+├── assessment_backend.py              # Flask API server (NEW)
+├── Start Assessment Tool.bat          # One-click launcher (NEW)
 ├── package.json
 └── README.md
 ```
+
+## 🏗️ Technical Details: AVL Score Tracker
+
+The score tracker uses a self-balancing AVL tree data structure for efficient operations:
+
+| Operation | Time Complexity |
+|-----------|-----------------|
+| Insert score | O(log n) |
+| Get ranking | O(log n) |
+| Get percentile | O(n) |
+| Search candidate | O(log n) |
+
+**Features:**
+- Thread-safe operations
+- Automatic rebalancing
+- Persistent storage to JSON
+- Memory-efficient with configurable limits
 
 ## 🤝 Contributing
 
@@ -197,6 +272,8 @@ You are free to use, modify, and distribute this software for any purpose, inclu
 ## 🙏 Acknowledgments
 
 Built with [Claude AI](https://claude.ai) as an alternative to expensive enterprise assessment software.
+
+**Simply Works AI** - Power your ideas with AI
 
 ---
 
